@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Brand colors */
+  --color-background: #050509;
+  --color-surface: #0B0B10;
+  --color-surface-elevated: #12121A;
+  --color-surface-soft: #181824;
+  --color-border: #27273A;
+  --color-border-soft: #1B1B29;
+
+  --color-text-primary: #F4F4F7;
+  --color-text-secondary: #A6A6B8;
+  --color-text-muted: #6F6F82;
+
+  --color-primary: #8B5CF6;
+  --color-primary-soft: #A78BFA;
+  --color-primary-dark: #6D28D9;
+
+  --color-accent: #00E0B8;
+  --color-accent-soft: #5FFFE0;
+
+  --color-danger: #FB7185;
+  --color-warning: #FACC15;
+  --color-success: #10B981;
+  --color-info: #38BDF8;
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Additional surfaces */
+  --color-surface-hover: #1C1C2C;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.24);
+  --shadow-elevated: 0 4px 16px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.24);
+  --shadow-modal: 0 20px 60px rgba(0,0,0,0.8), 0 8px 24px rgba(0,0,0,0.4);
+  --shadow-dropdown: 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.24);
+  --shadow-glow-primary: 0 0 20px rgba(139,92,246,0.25);
+  --shadow-glow-primary-lg: 0 0 32px rgba(139,92,246,0.4);
+  --shadow-glow-accent: 0 0 20px rgba(0,224,184,0.2);
+
+  /* Typography extras */
+  --text-caption: 0.6875rem;
+  --text-metric-xl: 2.5rem;
+  --text-metric-lg: 2rem;
+  --text-metric-md: 1.5rem;
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background-color: #050509;
+  color: #F4F4F7;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0B10;
+}
+::-webkit-scrollbar-thumb {
+  background: #27273A;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8B5CF6;
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid #8B5CF6;
+  outline-offset: 2px;
+}
+
+[data-chat-composer] textarea:focus,
+[data-chat-composer] textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Selection */
+::selection {
+  background: #8B5CF640;
+  color: #F4F4F7;
+}
