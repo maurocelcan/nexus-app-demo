@@ -358,8 +358,16 @@ export function GoogleMapsPDVMap({
     if (!apiKey) return;
 
     if (getMapsApi()) {
-      setScriptState("ready");
-      return;
+      const readyTimer = window.setTimeout(() => {
+        setScriptState("ready");
+        const mapsInstance = getMapsApi();
+        if (mapsInstance?.Geocoder) {
+          try {
+            geocoderRef.current = new mapsInstance.Geocoder();
+          } catch {}
+        }
+      }, 0);
+      return () => window.clearTimeout(readyTimer);
     }
 
     const existing = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;

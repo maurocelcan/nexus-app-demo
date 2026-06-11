@@ -95,7 +95,7 @@ Todos usan el middleware `persist` para sobrevivir recargas:
 ## Rutas
 
 ```
-/                    → Redirect según estado de auth
+/                    → Home pública; redirige si ya hay sesión
 /login               → Autenticación
 /register            → Registro
 /onboarding          → Setup inicial (4 pasos)

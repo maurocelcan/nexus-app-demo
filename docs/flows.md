@@ -1,8 +1,15 @@
 # Flujos de la aplicación — Nexus
 
+## Flujo 0 — Home pública
+
+1. Usuario entra a `/`.
+2. Si no hay sesión, ve la home full-screen con acceso a login y registro.
+3. En desktop se muestra una preview animada del cerebro comercial; en mobile se mantiene el panel de acceso liviano.
+4. Si ya hay sesión persistida en `nexus-auth`, `/` redirige a `/onboarding` cuando `isOnboarded === false` o a `/workspace` cuando `isOnboarded === true`.
+
 ## Flujo 1 — Login
 
-1. Usuario entra a `/login` (o es redirigido desde `/`)
+1. Usuario entra a `/login` desde la home o por redirección de una ruta protegida
 2. Ingresa email + password
 3. Se valida contra `MOCK_USER` y `MOCK_PASSWORD`
 4. Si es correcto: `login(user)` en auth-store

@@ -8,6 +8,17 @@
 
 El sidebar mantiene secciones colapsables para Proyectos, Recientes y Áreas. Los menús de conversaciones/proyectos usan overlay fijo para no cortarse por el scroll del sidebar.
 
+## Landing
+
+- `LandingHome`: home pública de `/`; conserva la redirección por sesión y orquesta loader, panel de acceso y preview.
+- `HomeAccessPanel`: propuesta de valor compacta, CTAs de ingreso/registro y señales enterprise.
+- `CommercialBrainPreview`: preview desktop del cerebro comercial con chat simulado, tarjetas de ecosistema y fondo animado.
+- `SimulatedChat`: state machine visual para pregunta, análisis, KPIs y acciones sugeridas.
+- `NeuralBackground`: canvas decorativo no interactivo para el fondo de conexiones.
+- `InitialLoader`: loader inicial de la home.
+
+Los escenarios y textos de la landing viven en `src/data/landing-home.ts`; los tipos compartidos viven en `src/types/landing.ts`. La preview se oculta en mobile para mantener una entrada liviana.
+
 ## Chat
 
 - `ChatInput`: composer con adjunto real `type=file`, autosize y foco accesible redondeado.

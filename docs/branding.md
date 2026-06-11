@@ -55,14 +55,14 @@ Nexus speaks their language. It understands "¿por qué cayó el sell-out en sup
 
 ### Logo
 
-The Nexus logo is a **connected node graph** — four satellite circles linked to a central hub via lines, enclosed within a subtle square background. It visualises the core brand metaphor: data points connected into intelligence.
+The Nexus logo uses the `public/logo_nexus.svg` asset: an orbital connected-node mark in white. It visualises the core brand metaphor: commercial signals connected into intelligence.
 
 **Construction:**
-- Bounding box: 32×32 viewBox
-- Center node: circle at (16,16) r=3
-- Satellite nodes: circles at (8,8), (24,8), (24,24), (8,24)
-- Connections: lines from center to each satellite
-- Fill: gradient from `primary (#8B5CF6)` → `accent (#00E0B8)`
+- Source asset: `public/logo_nexus.svg`
+- Bounding box: 1000×1000 viewBox
+- Outer circular orbit with three crossing elliptical paths
+- Four node dots distributed around the system
+- Fill/stroke: white, designed for dark backgrounds
 
 **Usage rules:**
 - Always on dark backgrounds (`background` or `surface`)

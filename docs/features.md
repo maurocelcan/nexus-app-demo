@@ -1,5 +1,21 @@
 # Nexus — Features & Módulos
 
+## Home pública (`/`)
+**Status:** Implementado
+
+Entrada pública full-screen inspirada en el prototipo `home-page-nexus`. Muestra un panel de acceso y una preview animada del cerebro comercial antes del login.
+
+**Funcionalidades:**
+- Loader inicial con mensajes de preparación del motor comercial.
+- Panel de acceso con CTAs a `/login` y `/register`.
+- Preview desktop con chat simulado, tarjetas KPI y señales comerciales animadas.
+- Vista mobile liviana sin preview pesada.
+- Redirección automática a `/onboarding` o `/workspace` cuando ya existe sesión.
+
+**Mock data visual:** `src/data/landing-home.ts`
+
+---
+
 Documentación funcional de todos los módulos implementados (prototipo frontend con Demo CPG mock y datasets reales procesados en memoria).
 
 ---
