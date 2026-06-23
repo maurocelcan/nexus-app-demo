@@ -1120,6 +1120,7 @@ function SkuComparator({
   pdvs: SellThroughPdv[];
   onUseRecommended: (draft: ActivationDraft) => void;
 }) {
+  const [sellMode, setSellMode] = useState<"sell-in" | "sell-out">("sell-in");
   const witness = SELL_THROUGH_SKUS.find((sku) => sku.id === witnessSkuId) ?? SELL_THROUGH_SKUS[0];
   const target = SELL_THROUGH_SKUS.find((sku) => sku.id === targetSkuId) ?? SELL_THROUGH_SKUS[1];
   const recommended = pdvs
@@ -1137,21 +1138,46 @@ function SkuComparator({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="rounded-lg border border-border bg-surface-elevated p-4">
-          <p className="text-sm font-semibold text-text-primary">Qué está mirando Nexus</p>
-          <p className="mt-1 text-xs leading-relaxed text-text-muted">
-            El SKU testigo marca dónde la categoría ya funciona. El SKU objetivo es el producto que queremos introducir o acelerar en esos mismos PDVs.
-          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-text-primary">Qué está mirando Nexus</p>
+              <p className="mt-1 text-xs leading-relaxed text-text-muted">
+                El SKU testigo marca dónde la categoría ya funciona. El SKU objetivo es el producto que queremos introducir o acelerar en esos mismos PDVs.
+              </p>
+            </div>
+            <div className="flex shrink-0 overflow-hidden rounded-lg border border-border bg-surface text-xs font-medium">
+              <button
+                type="button"
+                onClick={() => setSellMode("sell-in")}
+                className={cn(
+                  "px-3 py-1.5 transition-colors",
+                  sellMode === "sell-in" ? "bg-primary/15 text-primary-soft" : "text-text-muted hover:text-text-primary"
+                )}
+              >
+                Sell In
+              </button>
+              <button
+                type="button"
+                onClick={() => setSellMode("sell-out")}
+                className={cn(
+                  "border-l border-border px-3 py-1.5 transition-colors",
+                  sellMode === "sell-out" ? "bg-primary/15 text-primary-soft" : "text-text-muted hover:text-text-primary"
+                )}
+              >
+                Sell Out
+              </button>
+            </div>
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <Dropdown label="SKU testigo" options={SELL_THROUGH_SKUS.map((sku) => ({ value: sku.id, label: sku.name }))} value={witnessSkuId} onChange={onWitness} />
           <Dropdown label="SKU objetivo" options={SELL_THROUGH_SKUS.map((sku) => ({ value: sku.id, label: sku.name }))} value={targetSkuId} onChange={onTarget} />
         </div>
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
           <KpiTile label="PDVs zona" value={formatNumber(pdvs.length)} detail="Universo seleccionado" icon={Store} tone="info" />
           <KpiTile label="Compran testigo" value={formatNumber(pdvs.filter((pdv) => pdv.skusBought.includes(witness.id)).length)} detail={witness.name} icon={CheckCircle2} tone="success" />
           <KpiTile label="No compran objetivo" value={formatNumber(recommended.length)} detail={target.name} icon={Target} tone="warning" />
           <KpiTile label="Alto potencial" value={formatNumber(activationPdvs.length)} detail="Candidatos inmediatos" icon={Sparkles} tone="primary" />
-          <KpiTile label="Gap conversión" value={formatNumber(conversionGap)} detail="Compradores a capturar" icon={TrendingUp} tone="accent" />
         </div>
         <div className="rounded-lg border border-primary/20 bg-primary/10 p-4">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -1346,7 +1372,7 @@ function PromotionBuilder({
           <Input label="Fin vigencia" type="date" value={form.endDate} onChange={(event) => setForm((prev) => ({ ...prev, endDate: event.target.value }))} />
           <Input label="Precio actual" type="number" value={form.currentPrice} onChange={(event) => updateNumber("currentPrice", event.target.value)} />
           <Input label="Precio promo" type="number" value={form.promoPrice} onChange={(event) => updateNumber("promoPrice", event.target.value)} />
-          <Input label="Volumen esperado por PDV" type="number" value={form.expectedVolume} onChange={(event) => updateNumber("expectedVolume", event.target.value)} />
+          <Input label="Volumen necesario" type="number" value={form.expectedVolume} onChange={(event) => updateNumber("expectedVolume", event.target.value)} />
           <Input label="PDVs objetivo" type="number" value={form.targetPdvs} onChange={(event) => updateNumber("targetPdvs", event.target.value)} />
           <Input label="Margen objetivo (%)" type="number" value={form.targetMargin} onChange={(event) => updateNumber("targetMargin", event.target.value)} />
           <Input label="Hipótesis / objetivo" value={form.hypothesis} onChange={(event) => setForm((prev) => ({ ...prev, hypothesis: event.target.value }))} />
@@ -1354,17 +1380,8 @@ function PromotionBuilder({
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <KpiTile label="Revenue estimado" value={formatCurrency(simulation.revenue)} detail={`${formatNumber(simulation.volume)} unidades`} icon={BarChart3} tone="accent" />
           <KpiTile label="Margen estimado" value={`${simulation.estimatedMargin}%`} detail={`${simulation.gap >= 0 ? "+" : ""}${simulation.gap}pp vs objetivo`} icon={LineChart} tone={simulation.gap >= 0 ? "success" : "warning"} />
-          <KpiTile label="Volumen necesario" value={formatNumber(simulation.breakEven)} detail={`${formatNumber(simulation.requiredVolumePerPdv)} unidades por PDV`} icon={Target} tone="info" />
-          <KpiTile label="Masa contribución" value={`${simulation.roi}%`} detail={formatCurrency(simulation.contribution)} icon={TrendingUp} tone={simulation.roi >= 100 ? "success" : "warning"} />
-        </div>
-        <div className="rounded-lg border border-border bg-surface-soft p-3 text-xs text-text-secondary">
-          <span className="font-semibold text-text-primary">Cómo se calcula:</span>{" "}
-          Revenue estimado = precio promo x volumen esperado por PDV x PDVs objetivo. Volumen necesario = masa de contribución base / (precio promo x margen promo estimado).
-        </div>
-        <div className="rounded-lg border border-primary/20 bg-primary/10 p-3 text-xs text-primary-soft">
-          Recomendación: {simulation.incrementalVolume === 0
-            ? "guardar la promoción para seguimiento. El volumen planificado sostiene la masa de contribución."
-            : `subir el objetivo en ${formatNumber(simulation.incrementalVolume)} unidades o ajustar precio/mecánica antes de activar.`}
+          <KpiTile label="Volumen esperado" value={formatNumber(simulation.breakEven)} detail={`${formatNumber(simulation.requiredVolumePerPdv)} unidades por PDV`} icon={Target} tone="info" />
+          <KpiTile label="Masa de contribución esperada" value={formatCurrency(simulation.contribution)} detail={`${simulation.roi >= 100 ? "+" : ""}${simulation.roi - 100}% vs necesaria`} icon={TrendingUp} tone={simulation.roi >= 100 ? "success" : "warning"} />
         </div>
         <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-text-muted">
@@ -1393,12 +1410,6 @@ function DynamicsTracking({ dynamics }: { dynamics: SellThroughDynamic[] }) {
         <CardTitle>Seguimiento de promociones</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="rounded-lg border border-border bg-surface-elevated p-4">
-          <p className="text-sm font-semibold text-text-primary">Cómo leer esta sección</p>
-          <p className="mt-1 text-xs leading-relaxed text-text-muted">
-            Cada tarjeta mezcla plan vs real. En dataset real, si no hay tracking cargado, las promociones creadas quedan en planificación con real en cero.
-          </p>
-        </div>
         {dynamics.length === 0 && (
           <EmptyChart message="Todavía no hay promociones creadas para seguimiento. Creá una promoción arriba para verla en estado En planificación." />
         )}
@@ -1934,7 +1945,7 @@ export default function SellThroughPage() {
               <KpiTile label="Universo real" value={formatNumber(universeCount)} detail={universeDetail} icon={Store} tone="primary" />
                 <KpiTile label="Atendidos" value={formatNumber(filteredPdvs.filter((pdv) => pdv.served).length)} detail="Con distribuidor asignado" icon={Route} tone="info" />
                 <KpiTile label="Compradores" value={formatNumber(filteredPdvs.filter((pdv) => pdv.status === "buyer").length)} detail="Con compra reciente" icon={CheckCircle2} tone="success" />
-                <KpiTile label="Sin compra" value={formatNumber(filteredPdvs.filter((pdv) => pdv.status === "non-buyer").length)} detail="No compradores" icon={TrendingDown} tone="danger" />
+                <KpiTile label="No atendidos" value={formatNumber(filteredPdvs.filter((pdv) => pdv.status === "non-buyer").length)} detail="Sin distribuidor asignado" icon={TrendingDown} tone="danger" />
                 <KpiTile label="Potenciales" value={formatNumber(filteredPdvs.filter((pdv) => pdv.status === "potential").length)} detail="Con oportunidad activa" icon={Sparkles} tone="warning" />
               </div>
             </CardContent>
@@ -1952,11 +1963,6 @@ export default function SellThroughPage() {
                 <Button variant="outline" size="sm" onClick={createProjectFromSelection}>
                   <Target className="h-3.5 w-3.5" />Crear proyecto y objetivos
                 </Button>
-                {canExport && (
-                  <Button variant="secondary" size="sm" onClick={() => showToast("Reporte ejecutivo preparado")}>
-                    <Download className="h-3.5 w-3.5" />Exportar reporte
-                  </Button>
-                )}
                 <Button variant="primary" size="sm" onClick={() => router.push(ROUTES.WORKSPACE)}>
                   <Zap className="h-3.5 w-3.5" />Preguntarle a Nexus
                   <ArrowRight className="h-3.5 w-3.5" />
